@@ -51,7 +51,7 @@ vector<string> getCommand(queue<string> &q)
 
 Command * parse(const string &command)
 {
-    // delte the command after the comment symbol("#")
+    // delete the command after the comment symbol("#")
     string cmd = command.substr(0, command.find("#"));
     
     // seperate the command by space and connector

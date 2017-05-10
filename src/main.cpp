@@ -5,6 +5,7 @@
 int main()
 {
     std::string command;
+    std::cout << "-----write 'help' for instructions-----" << std::endl;
     do {
         std::cout << prompt_symbol << " ";
         getline(std::cin, command);
