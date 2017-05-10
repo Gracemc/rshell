@@ -17,6 +17,8 @@ void Connector::print() const {
 }
 
 int Connector::exec() const {
+    int status = -1;
+    
     if (exit_flag)
         return 0;
     
@@ -32,4 +34,5 @@ int Connector::exec() const {
         if (lchild->exec() != 0)
             rchild->exec();
     }
+    return status;
 }
