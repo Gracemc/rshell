@@ -20,12 +20,10 @@ int Executable::exec() const
     
     if (exit_flag)
         return 0;
-    if (argv[0] == "exit") {
+    if (argv[0] == "exit") 
         exit_flag = true;
-    }
-    else if (argv[0] == "cprompt") {
+    else if (argv[0] == "cprompt") 
         prompt_symbol = argv[1];
-    }
     else if (argv[0] == "help") {
         std::cout << "---------------------------- built-in command: ----------------------------" << std::endl;
         std::cout << "---------------------- 1. write 'exit' to exit shell ----------------------" << std::endl;
