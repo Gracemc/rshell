@@ -9,6 +9,7 @@
 using std::string;
 using std::vector;
 using std::cout;
+using std::endl;
 
 #define MAXSIZE 100 //may not big enough, cause error
 
@@ -25,12 +26,12 @@ int Executable::exec() const
     else if (argv[0] == "cprompt") 
         prompt_symbol = argv[1];
     else if (argv[0] == "help") {
-        std::cout << "---------------------------- built-in command: ----------------------------" << std::endl;
-        std::cout << "---------------------- 1. write 'exit' to exit shell ----------------------" << std::endl;
-        std::cout << "------- 2. write 'cprompt' with an argument to create prompt symbol -------" << std::endl;
-        std::cout << "---------------------------------------------------------------------------" << std::endl;
-        std::cout << "---------------------------- external command: ----------------------------" << std::endl;
-        std::cout << "---------- write other commands(the same as the commands in bash) ---------" << std::endl;
+        cout << "---------------------------- built-in command: ----------------------------" << endl;
+        cout << "---------------------- 1. write 'exit' to exit shell ----------------------" << endl;
+        cout << "------- 2. write 'cprompt' with an argument to create prompt symbol -------" << endl;
+        cout << "---------------------------------------------------------------------------" << endl;
+        cout << "---------------------------- external command: ----------------------------" << endl;
+        cout << "---------- write other commands(the same as the commands in bash) ---------" << endl;
     }
     else {
         pid_t pid;
@@ -38,9 +39,9 @@ int Executable::exec() const
         pid = fork();
         
         if (pid == 0) {
-            //char *cmd[argv.size() + 1]; will cause error: ISO C++ forbids variable length array 'xxx'
+            // char *cmd[argv.size() + 1]; // maybe cause error: ISO C++ forbids variable length array 'xxx'
             char *cmd[MAXSIZE];
-            for (auto t = 0; t < argv.size(); ++t)
+            for (size_t t = 0; t < argv.size(); ++t)
                 cmd[t] = const_cast<char*>(argv[t].c_str());
             cmd[argv.size()] = NULL;
             execvp(cmd[0], cmd);
@@ -48,16 +49,12 @@ int Executable::exec() const
                 perror("Error! Invaild command");   
             }
         }
+        else if (pid == -1) {
+            perror("folk error");
+            exit(1);
+        }
         else
             waitpid(pid, &status, WUNTRACED);
     }
     return status;
-}
-
-void Executable::print() const {
-    for (auto it = argv.begin(); it != argv.end(); ++it) {
-        if (!(it == argv.begin()))
-            cout << " ";
-        cout << *it;
-    }
 }

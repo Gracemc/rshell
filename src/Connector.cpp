@@ -6,18 +6,11 @@
 
 using std::vector;
 using std::string;
-using std::cout;
 
 Connector::Connector(vector<string> &argv, Command *l, Command *r) : Command(argv), lchild(l), rchild(r) { }
 
-void Connector::print() const {
-    lchild->print();
-    cout << " " << *argv.begin() << " ";
-    rchild->print();
-}
-
 int Connector::exec() const {
-    int status = -1;
+    int status = 0;
     
     if (exit_flag)
         return 0;
@@ -35,4 +28,9 @@ int Connector::exec() const {
             rchild->exec();
     }
     return status;
+}
+
+Connector::~Connector() {
+    delete lchild;
+    delete rchild;
 }

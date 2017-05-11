@@ -1,10 +1,14 @@
-CFLAG = -std=c++11 -Wall -Werror -ansi -pedantic
+CFLAG = -std=c++11 -Wall -Werror -pedantic -I include
 CC = g++
+SOURCE = src/main.cpp src/Command.cpp src/Connector.cpp src/Executable.cpp \
+	 src/parse.cpp
 
-all :
-	mkdir -p bin
-	$(CC) $(CFLAG) src/main.cpp src/Command.cpp \
-	src/Executable.cpp src/Connector.cpp \
-	-I include -o bin/rshell
+all : rshell
+
+rshell :
+	mkdir  bin
+	$(CC) $(CFLAG) $(SOURCE) -o bin/rshell
+
+.PHONY : clean
 clean :
 	rm -rf bin
