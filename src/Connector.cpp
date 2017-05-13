@@ -3,9 +3,12 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <iostream>
 
 using std::vector;
 using std::string;
+using std::cout;
+using std::endl;
 
 Connector::Connector(vector<string> &argv, Command *l, Command *r) : Command(argv), lchild(l), rchild(r) { }
 
@@ -34,3 +37,10 @@ Connector::~Connector() {
     delete lchild;
     delete rchild;
 }
+
+void Connector::print() const {
+    lchild->print();
+    cout << " " << argv[0] << " ";
+    rchild->print();
+}
+    

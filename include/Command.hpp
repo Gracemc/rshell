@@ -13,6 +13,7 @@ protected:
 public:
     Command(std::vector<std::string> &v);
     virtual int exec() const = 0;
+    virtual void print() const = 0;
     virtual ~Command() = default;
 };
 

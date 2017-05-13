@@ -58,3 +58,8 @@ int Executable::exec() const
     }
     return status;
 }
+
+void Executable::print() const {
+    cout << argv[0];
+}
+    

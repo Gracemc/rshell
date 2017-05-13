@@ -1,5 +1,6 @@
 #include <Command.hpp>
 #include <parse.hpp>
+
 #include <iostream>
 #include <string>
 
@@ -7,17 +8,24 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
+using std::getline;
 
 int main()
 {
-    string command;
     cout << "-----type 'help' for instructions-----" << endl;
-    do {
-        cout << prompt_symbol << " ";
-        getline(cin, command);
+    cout << prompt_symbol << " ";
+
+    string command;
+    while (getline(cin, command)) {
+        
         auto t = parse(command);
         t->exec();
-    } while (!exit_flag);
+        
+        if (exit_flag)
+            break;
+        
+        cout << prompt_symbol << " ";
+    }
 
     return 0;
 }

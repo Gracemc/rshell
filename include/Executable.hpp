@@ -7,6 +7,7 @@ class Executable : public Command {
 public:
     Executable(std::vector<std::string> &c);
     int  exec() const override;
+    void print() const override;
 };
 
 #endif
