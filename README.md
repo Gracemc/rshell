@@ -17,3 +17,4 @@ connector = `||` or `&&` or `;`
 # bugs
 1. `echo "#123"` will be executed as `echo"`, because of stupid comment(just erase all the content after comment).
 2. As an array size can not be a variable, we define a macro named `MAXSIZE` and set it to 100, but it can still be not big enough to store commands.
+3. Use tests file to test the program, if there is no `exit` command at the end of the file, the program will print an extra prompt_symbol.
