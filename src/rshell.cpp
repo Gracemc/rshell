@@ -1,4 +1,4 @@
-#include <parse.hpp>
+#include <rshell.hpp>
 #include <Command.hpp>
 #include <Executable.hpp>
 #include <Connector.hpp>
@@ -10,7 +10,10 @@
 
 #include <boost/tokenizer.hpp>
 
-using namespace std;
+using std::vector;
+using std::string;
+using std::stack;
+using std::queue;
 
 bool isOperator(const string &token)
 {
@@ -41,6 +44,7 @@ Command * parse(const string &command)
     // convert from infix expression to postfix expression
     queue<std::string> postfix;
     stack<std::string> s;
+    // push all the executable into the queue
     for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
         if (isOperator(*beg)) {
             postfix.push("#");             // each executable is end with a #
@@ -49,7 +53,7 @@ Command * parse(const string &command)
         else
             postfix.push(*beg);
     }
-    // pop the rest
+    // pop the operator
     while (!s.empty()) {
         postfix.push(s.top());
         s.pop();

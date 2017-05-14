@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-extern bool exit_flag;
-extern std::string prompt_symbol;
-
 class Command {
+public:
+    static bool exit_flag;
+    static std::string prompt_symbol;
 protected:
     std::vector<std::string> argv;
 public:

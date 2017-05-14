@@ -1,7 +1,7 @@
 CFLAG = -std=c++11 -Wall -Werror -pedantic -I include
 CC = g++
 SOURCE = src/main.cpp src/Command.cpp src/Connector.cpp src/Executable.cpp \
-	 src/parse.cpp
+	 src/rshell.cpp
 
 all : rshell
 

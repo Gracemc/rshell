@@ -1,6 +1,7 @@
 #include <Executable.hpp>
 
 #include <iostream>
+#include <cstdio>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -10,8 +11,10 @@ using std::string;
 using std::vector;
 using std::cout;
 using std::endl;
+using std::perror;
 
-#define MAXSIZE 100 //may not big enough, cause error
+// may not big enough, cause error
+#define MAXSIZE 100 
 
 Executable::Executable(vector<string> &c) : Command(c) { }
 
@@ -40,17 +43,19 @@ int Executable::exec() const
         
         if (pid == 0) {
             // char *cmd[argv.size() + 1]; // maybe cause error: ISO C++ forbids variable length array 'xxx'
-            char *cmd[MAXSIZE];
+            char* cmd[MAXSIZE];
+            
             for (size_t t = 0; t < argv.size(); ++t)
                 cmd[t] = const_cast<char*>(argv[t].c_str());
             cmd[argv.size()] = NULL;
+            
             execvp(cmd[0], cmd);
             if(execvp(cmd[0], cmd) == -1) {
-                perror("Error! Invaild command");   
+                perror("COMMAND ERROR");   
             }
         }
         else if (pid == -1) {
-            perror("folk error");
+            perror("FORK ERROR");
             exit(1);
         }
         else

@@ -1,5 +1,4 @@
-#include <Command.hpp>
-#include <parse.hpp>
+#include <rshell.hpp>
 
 #include <iostream>
 #include <string>
@@ -13,7 +12,7 @@ using std::getline;
 int main()
 {
     cout << "-----type 'help' for instructions-----" << endl;
-    cout << prompt_symbol << " ";
+    cout << Command::prompt_symbol << " ";
 
     string command;
     while (getline(cin, command)) {
@@ -21,10 +20,10 @@ int main()
         auto t = parse(command);
         t->exec();
         
-        if (exit_flag)
+        if (Command::exit_flag)
             break;
         
-        cout << prompt_symbol << " ";
+        cout << Command::prompt_symbol << " ";
     }
 
     return 0;
