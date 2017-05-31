@@ -1,4 +1,4 @@
-#include <rshell.hpp>
+#include <parse.hpp>
 
 #include <iostream>
 #include <string>
@@ -15,7 +15,8 @@ int main()
     cout << Command::prompt_symbol << " ";
 
     string command;
-    while (getline(cin, command)) {
+    while (getline(cin, command))
+    {
         
         auto t = parse(command);
         t->exec();
