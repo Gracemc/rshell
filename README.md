@@ -1,6 +1,7 @@
-# rshell
+## rshell
+#Basic Usage
 rshell is a shell written in C++. It perform the following steps:
-1. Print a command prompt, default is `*_*` (so cute!!!).
+1. Print a command prompt, default is `$` (so cute!!!).
 2. Read in a command on one line. Commands will have the form:
 
 cmd       = executable [ argumentList ] [connector cmd]
@@ -14,7 +15,11 @@ connector = `||` or `&&` or `;`
 
 `cprompt <new prompt symbol>` for change the prompt symbol
 
+`test/[]` for test statement
+`-e` checks if the file/directory exists
+`-f` checks if the file/directory exists
+`-d` checks if the file/directory exists
+
 # bugs
 1. `echo "#123"` will be executed as `echo"`, because of stupid comment(just erase all the content after comment).
-2. As an array size can not be a variable, we define a macro named `MAXSIZE` and set it to 100, but it can still be not big enough to store commands.
-3. Use tests file to test the program, if there is no `exit` command at the end of the file, the program will print an extra prompt_symbol.
+
