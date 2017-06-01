@@ -42,6 +42,7 @@ vector<string> getCommand(queue<string> &q)
 
 Command * parse(const string &command)
 {
+	Command::uneven_flag = false;
 	// delete the command after the comment symbol("#")
 	string cmd = command.substr(0, command.find("#"));
     
@@ -93,6 +94,8 @@ Command * parse(const string &command)
 	// pop the operator
 	while (!s.empty())
 	{
+		if (s.top() == "(")
+			Command::uneven_flag = true;
 		postfix.push(s.top());
 		s.pop();
 	}

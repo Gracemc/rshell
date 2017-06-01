@@ -24,9 +24,14 @@ Executable::Executable(vector<string> &c) : Command(c) { }
 
 int Executable::exec() const
 {
-    int status = -1;
+    int status = 0;
     struct stat fileStat;
-     
+
+    if (uneven_flag)
+    {
+	    cout << "THE PARENTHESES ARE UNEVEN" << endl;
+	    return 0;
+    }
     if (exit_flag)
         return 0;
     if (argv[0] == "exit") 
@@ -45,7 +50,8 @@ int Executable::exec() const
         cout << "-------    b) -f checks if the file/directory exists and is a regular file ---------------" << endl;
         cout << "-------    c) -d checks if the file/directory exists and is a directory ------------------" << endl;
     }
-    else {
+    else
+    {
         pid_t pid;
         bool isBrackets = false;
         bool matchBrackets = true;
@@ -53,7 +59,8 @@ int Executable::exec() const
         
         pid = fork();
         
-        if (pid == 0) {
+        if (pid == 0)
+	{
             // char *cmd[argv.size() + 1]; // maybe cause error: ISO C++ forbids variable length array 'xxx'
             char* cmd[MAXSIZE];
             
@@ -61,7 +68,8 @@ int Executable::exec() const
                 cmd[t] = const_cast<char*>(argv[t].c_str());
             cmd[argv.size()] = NULL;
             
-            if (strcmp(cmd[0], "test") == 0 || strcmp(cmd[0], "[") == 0 ) {
+            if (strcmp(cmd[0], "test") == 0 || strcmp(cmd[0], "[") == 0 )
+	    {
                 if (strcmp(cmd[0], "[") == 0)
                     isBrackets = true;
                 for (unsigned i = 1; i < argv.size()-1; ++i) {
@@ -74,51 +82,67 @@ int Executable::exec() const
                         matchBrackets = false;
                     }
                 }
-                if (!isBrackets || (isBrackets && strcmp(cmd[argv.size()-1], "]") == 0 && matchBrackets)) {
-                    if (strcmp(cmd[1], "-d") == 0) {
+                if (!isBrackets || (isBrackets && strcmp(cmd[argv.size()-1], "]") == 0 && matchBrackets))
+		{
+                    if (strcmp(cmd[1], "-d") == 0)
+		    {
                         if(stat(cmd[2], &fileStat) == -1)
                             perror("stat");
-                        else {
-                            if (S_ISDIR(fileStat.st_mode)) {
+                        else
+			{
+                            if (S_ISDIR(fileStat.st_mode))
+			    {
                                 cout << "(True)" << endl;
                                 return 0;
                             }
-                            else {
+                            else
+			    {
                                 cout << "(False)" << endl;
                                 return 1;
                             }
                         }
                     }
-                    else if (strcmp(cmd[1], "-f") == 0) {
+                    else if (strcmp(cmd[1], "-f") == 0)
+		    {
                         if(stat(cmd[2], &fileStat) == -1) 
                             perror("stat");
-                        else {
-                            if (S_ISREG(fileStat.st_mode)) {
+                        else
+			{
+                            if (S_ISREG(fileStat.st_mode))
+			    {
                                 cout << "(True)" << endl;
                                 return 0;
                             }
-                            else {
+                            else
+			    {
                                 cout << "(False)" << endl;
                                 return 1;
                             }
                         }
                     }
-                    else if (strcmp(cmd[1], "-e") == 0) {
-                        if(stat(cmd[2], &fileStat) == -1) {
+                    else if (strcmp(cmd[1], "-e") == 0)
+		    {
+                        if(stat(cmd[2], &fileStat) == -1)
+			{
                             cout << "(False)" << endl;
                             return 1;
                         }
-                        else {
+                        else
+			{
                             cout << "(True)" << endl;
                             return 0;
                         }
                     }
-                    else {
-                        if(stat(cmd[1], &fileStat) == -1) {
+                    else
+		    {
+                        if(stat(cmd[1], &fileStat) == -1)
+			{
+	      
                             cout << "(False)" << endl;
                             return 1;
                         }
-                        else {
+                        else
+			{
                             cout << "(True)" << endl;
                             return 0;
                         }
@@ -128,9 +152,11 @@ int Executable::exec() const
                     cout << "ERROR: Uneven amount of square brackets." << endl;
                 else ;
             }
-            else {
+            else
+	    {
                 execvp(cmd[0], cmd);
-                if(execvp(cmd[0], cmd) == -1) {
+                if(execvp(cmd[0], cmd) == -1)
+		{
                     perror("COMMAND ERROR");   
                 }
             }
