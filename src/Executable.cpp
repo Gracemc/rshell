@@ -37,16 +37,19 @@ int Executable::exec() const
         cout << "----------------------------------- built-in command: ------------------------------------" << endl;
         cout << "----------------------------- 1. write 'exit' to exit shell ------------------------------" << endl;
         cout << "-------------- 2. write 'cprompt' with an argument to create prompt symbol ---------------" << endl;
-        cout << "------- 3. write 'test'/'[]' with -e/-f/-d and your filepath to set a test command -------" << endl;
+        cout << "------------------------------------------------------------------------------------------" << endl;
+        cout << "----------------------------------- external command: ------------------------------------" << endl;
+        cout << "--------------- 1. write other commands(the same as the commands in bash) ----------------" << endl;
+        cout << "------- 2. write 'test'/'[]' with -e/-f/-d and your filepath to set a test command -------" << endl;
         cout << "-------    a) -e checks if the file/directory exists -------------------------------------" << endl;
         cout << "-------    b) -f checks if the file/directory exists and is a regular file ---------------" << endl;
         cout << "-------    c) -d checks if the file/directory exists and is a directory ------------------" << endl;
-        cout << "------------------------------------------------------------------------------------------" << endl;
-        cout << "----------------------------------- external command: ------------------------------------" << endl;
-        cout << "----------------- write other commands(the same as the commands in bash) -----------------" << endl;
     }
     else {
         pid_t pid;
+        bool isBrackets = false;
+        bool matchBrackets = true;
+        bool mError = false;
         
         pid = fork();
         
@@ -58,55 +61,72 @@ int Executable::exec() const
                 cmd[t] = const_cast<char*>(argv[t].c_str());
             cmd[argv.size()] = NULL;
             
-            if (strcmp(cmd[0], "test") == 0 || strcmp(cmd[0], "[") == 0) {
-                if (strcmp(cmd[1], "-d") == 0) {
-                    if(stat(cmd[2], &fileStat) == -1) 
-                        perror("stat");
-                    else {
-                        if (S_ISDIR(fileStat.st_mode)) {
-                            cout << "(True)" << endl;
-                            return 0;
-                        }
+            if (strcmp(cmd[0], "test") == 0 || strcmp(cmd[0], "[") == 0 ) {
+                if (strcmp(cmd[0], "[") == 0)
+                    isBrackets = true;
+                for (unsigned i = 1; i < argv.size()-1; ++i) {
+                    if (strcmp(cmd[i], "]") == 0) {
+                        matchBrackets = false;
+                    }
+                    if (strcmp(cmd[i], "[") == 0) {
+                        cout << "ERROR: too many square brackets." << endl;
+                        mError = true;
+                        matchBrackets = false;
+                    }
+                }
+                if (!isBrackets || (isBrackets && strcmp(cmd[argv.size()-1], "]") == 0 && matchBrackets)) {
+                    if (strcmp(cmd[1], "-d") == 0) {
+                        if(stat(cmd[2], &fileStat) == -1)
+                            perror("stat");
                         else {
+                            if (S_ISDIR(fileStat.st_mode)) {
+                                cout << "(True)" << endl;
+                                return 0;
+                            }
+                            else {
+                                cout << "(False)" << endl;
+                                return 1;
+                            }
+                        }
+                    }
+                    else if (strcmp(cmd[1], "-f") == 0) {
+                        if(stat(cmd[2], &fileStat) == -1) 
+                            perror("stat");
+                        else {
+                            if (S_ISREG(fileStat.st_mode)) {
+                                cout << "(True)" << endl;
+                                return 0;
+                            }
+                            else {
+                                cout << "(False)" << endl;
+                                return 1;
+                            }
+                        }
+                    }
+                    else if (strcmp(cmd[1], "-e") == 0) {
+                        if(stat(cmd[2], &fileStat) == -1) {
                             cout << "(False)" << endl;
                             return 1;
                         }
-                    }
-                }
-                else if (strcmp(cmd[1], "-f") == 0) {
-                    if(stat(cmd[2], &fileStat) == -1) 
-                    perror("stat");
-                    else {
-                        if (S_ISREG(fileStat.st_mode)) {
+                        else {
                             cout << "(True)" << endl;
                             return 0;
                         }
-                        else {
+                    }
+                    else {
+                        if(stat(cmd[1], &fileStat) == -1) {
                             cout << "(False)" << endl;
                             return 1;
                         }
+                        else {
+                            cout << "(True)" << endl;
+                            return 0;
+                        }
                     }
                 }
-                else if (strcmp(cmd[1], "-e") == 0) {
-                    if(stat(cmd[2], &fileStat) == -1) {
-                        cout << "(False)" << endl;
-                        return 1;
-                    }
-                    else {
-                        cout << "(True)" << endl;
-                        return 0;
-                    }
-                }
-                else {
-                    if(stat(cmd[1], &fileStat) == -1) {
-                        cout << "(False)" << endl;
-                        return 1;
-                    }
-                    else {
-                        cout << "(True)" << endl;
-                        return 0;
-                    }
-                }
+                else if (!mError)
+                    cout << "ERROR: Uneven amount of square brackets." << endl;
+                else ;
             }
             else {
                 execvp(cmd[0], cmd);
