@@ -7,4 +7,3 @@ test -e file || test -e file2
 [ -e rshell ] && echo path exists
 [ -e rshell ] ]
 [ [ -e newfile ] ]
-exit

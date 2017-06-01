@@ -11,21 +11,25 @@ using std::getline;
 
 int main()
 {
-    cout << "-----type 'help' for instructions-----" << endl;
-    cout << Command::prompt_symbol << " ";
+	cout << "-----type 'help' for instructions-----" << endl;
+	cout << Command::prompt_symbol << " ";
 
-    string command;
-    while (getline(cin, command))
-    {
+	string command;
+	while (getline(cin, command))
+	{
         
-        auto t = parse(command);
-        t->exec();
+		auto t = parse(command);
+		
+		if (Command::uneven_flag)
+			cout << "ERROR: Uneven amount of parentheses." << endl;
+		else
+			t->exec();
         
-        if (Command::exit_flag)
-            break;
+		if (Command::exit_flag)
+			break;
         
-        cout << Command::prompt_symbol << " ";
-    }
+		cout << Command::prompt_symbol << " ";
+	}
 
-    return 0;
+	return 0;
 }
