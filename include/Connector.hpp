@@ -11,6 +11,7 @@ public:
     Connector(std::vector<std::string> &argv, Command *lchild, Command *rchild);
     int exec() const override;
     void print() const override;
+    const char* get() const override;
     ~Connector() override;
 };
 
