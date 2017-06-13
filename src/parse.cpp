@@ -17,7 +17,7 @@ using std::queue;
 
 bool isOperator(const string &token)
 {
-	return token == "&&" || token == "||" || token == ";";
+	return token == "&&" || token == "||" || token == ";" || token == ">" || token == ">>" || token == "<" || token == "|";
 }
 
 vector<string> getCommand(queue<string> &q)
