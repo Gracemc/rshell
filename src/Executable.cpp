@@ -39,16 +39,22 @@ int Executable::exec() const {
     else if (argv[0] == "cprompt") 
         prompt_symbol = argv[1];
     else if (argv[0] == "help") {
+        cout << "------------------------------------------------------------------------------------------" << endl;
         cout << "----------------------------------- built-in command: ------------------------------------" << endl;
         cout << "----------------------------- 1. write 'exit' to exit shell ------------------------------" << endl;
         cout << "-------------- 2. write 'cprompt' with an argument to create prompt symbol ---------------" << endl;
-        cout << "------------------------------------------------------------------------------------------" << endl;
-        cout << "----------------------------------- external command: ------------------------------------" << endl;
-        cout << "--------------- 1. write other commands(the same as the commands in bash) ----------------" << endl;
-        cout << "------- 2. write 'test'/'[]' with -e/-f/-d and your filepath to set a test command -------" << endl;
+        cout << "------- 3. write 'test'/'[]' with -e/-f/-d and your filepath to set a test command -------" << endl;
         cout << "-------    a) -e checks if the file/directory exists -------------------------------------" << endl;
         cout << "-------    b) -f checks if the file/directory exists and is a regular file ---------------" << endl;
         cout << "-------    c) -d checks if the file/directory exists and is a directory ------------------" << endl;
+        cout << "------------------------------------------------------------------------------------------" << endl;
+        cout << "----------------------------------- external command: ------------------------------------" << endl;
+        cout << "--------------- 1. write other commands(the same as the commands in bash) ----------------" << endl;
+        cout << "------------------------------------------------------------------------------------------" << endl;
+        cout << "----------------------------------------- note: ------------------------------------------" << endl;
+        cout << "------------- 1. write '<' for input redirection, '>' for output redirection -------------" << endl;
+        cout << "------------- 2. write '>>' for append, '|' for piping  ---------------------------------" << endl;
+        cout << "------------------------------------------------------------------------------------------" << endl;
     }
     else if (argv[0] == "test" || argv[0] == "[") {
         if (argv[0] == "[") {
@@ -67,7 +73,7 @@ int Executable::exec() const {
         if (!isBrackets || (isBrackets && argv[argv.size()-1] == "]" && matchBrackets)) {
             if (argv[1] == "-d") {
                 if(stat(argv[2].c_str(), &fileStat) == -1) {
-                    perror("stat");
+                    perror("STAT ERROR");
                 }
                 else { 
                     if (S_ISDIR(fileStat.st_mode)) {
@@ -82,7 +88,7 @@ int Executable::exec() const {
             }
             else if (argv[1] == "-f") {
                 if(stat(argv[2].c_str(), &fileStat) == -1) {
-                    perror("stat");
+                    perror("STAT ERROR");
                 }
                 else {
                     if (S_ISREG(fileStat.st_mode)) {
@@ -154,4 +160,9 @@ int Executable::exec() const {
 
 void Executable::print() const {
     cout << argv[0];
+}
+
+const char* Executable::get() const{
+    const char* fileName = argv[0].c_str();
+    return fileName;
 }
