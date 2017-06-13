@@ -79,6 +79,7 @@ int Connector::exec() const {
         newCmd.append(newCommand);
         newCmd.append(" ");
         newCmd.append(buf);
+        newCmd.erase(newCmd.size() - 1);
         const string Cmd = newCmd;
         
         Command* newLchild = parse(Cmd);
